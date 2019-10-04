@@ -143,12 +143,12 @@ public class WebClient {
 	 * Closest Preceding Finger. Add by Sam
 	 */
 	public NodeInfo getClosestPrecedingFinger(NodeInfo node, int id) throws DHTBase.Failed {
-		UriBuilder closestPath = UriBuilder.fromUri(node.addr).path("closestPrecedingFinger");
+		UriBuilder closestPath = UriBuilder.fromUri(node.addr).path("finger");
 		URI getQuery = closestPath.queryParam("id", id).build();
 		info("client closestPrecedingFinger(" + getQuery + ")");
 		Response res = getRequest(getQuery);
 		if (res == null || res.getStatus() >= 300) {
-			throw new DHTBase.Failed("GET /closestPrecedingFinger?id=ID");
+			throw new DHTBase.Failed("GET /finger?id=ID");
 		} else {
 			return res.readEntity(nodeInfoType).getValue();
 		}

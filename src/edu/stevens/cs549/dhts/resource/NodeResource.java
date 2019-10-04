@@ -53,6 +53,13 @@ public class NodeResource {
 	}
 
 	@GET
+	@Path("finger")
+	@Produces("application/xml")
+	public Response getClosestPrecedingFinger(int id) {
+		return new NodeService(headers, uriInfo).closestPrecedingFinger(id);
+	}
+
+	@GET
 	@Path("succ")
 	@Produces("application/xml")
 	public Response getSucc() {
