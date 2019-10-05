@@ -198,6 +198,7 @@ public class WebClient {
 	}
 	/*
 	 * Add by Sam
+	 * getBindings
 	 */
 	public String [] get(NodeInfo node, String key) throws DHTBase.Failed {
 		UriBuilder ub = UriBuilder.fromUri(node.addr);

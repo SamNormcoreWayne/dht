@@ -48,6 +48,4 @@ public interface IDHTResource {
 	public void add(String k, String v) throws Invalid;
 	
 	public void delete(String k, String v) throws Invalid;
-	
-	
 }

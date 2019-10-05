@@ -33,7 +33,7 @@ import edu.stevens.cs549.dhts.main.Time;
 
 public class NodeService {
 	
-	// TODO: add the missing operations
+	// TODO: add the missing operations. added by Sam
 
 	HttpHeaders headers;
 
@@ -54,6 +54,12 @@ public class NodeService {
 
 	public static JAXBElement<NodeInfo> nodeInfoRep(NodeInfo n) {
 		return new JAXBElement<NodeInfo>(nsNodeInfo, NodeInfo.class, n);
+	}
+
+	public static final QName bindingInfo = new QName(ns, "BindingInfo");
+
+	public static JAXBElement<String[]> stringInfoRep(String[] str) {
+		return new JAXBElement<String[]>(bindingInfo, String[].class, str);
 	}
 
 	private void advanceTime() {
@@ -84,6 +90,10 @@ public class NodeService {
 		return Response.ok().header(Time.TIME_STAMP, Time.advanceTime()).build();
 	}
 
+	private Response response(String[] bindings) {
+		return Response.ok(stringInfoRep(bindings)).header(Time.TIME_STAMP, Time.advanceTime()).build();
+	}
+
 	public Response getNodeInfo() {
 		advanceTime();
 		info("getNodeInfo()");
@@ -108,9 +118,50 @@ public class NodeService {
 		return response(dht.getPred());
 	}
 
-	public Response getBinding() {
+	public Response getBinding(String key) {
+
 		advanceTime();;
 		info ("getBinding()");
+		String[] res = null;
+		try {
+			res = dht.get(key);
+		} catch (Invalid err) {
+			err.printStackTrace();
+		}
+		if (res == null) {
+			return responseNull();
+		} else {
+			return response(res);
+		}
+	}
+
+	public Response addBinding(String key, String val) {
+		advanceTime();
+		info("addBinding()");
+		boolean tag = true;
+		try {
+			dht.add(key, val);
+		} catch (Invalid err) {
+			tag = false;
+			err.printStackTrace();
+		}
+		if (!tag)
+			return responseNull();
+		return response();
+	}
+
+	public Response deleteBinding(String key, String val) {
+		advanceTime();
+		info("deleteBinding()");
+		boolean tag = true;
+		try {
+			dht.delete(key, val);
+		} catch (Invalid err) {
+			tag = false;
+			err.printStackTrace();
+		}
+		if (!tag)
+			return responseNull();
 		return response();
 	}
 
